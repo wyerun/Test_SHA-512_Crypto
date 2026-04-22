@@ -27,3 +27,4 @@ def test_type_error():
     """Перевірка обробки некоректних типів даних (Robustness test)"""
     with pytest.raises(AttributeError):
         calculate_sha512(None)
+

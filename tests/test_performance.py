@@ -29,5 +29,5 @@ def test_performance_comparison():
     print(f"Бібліотека Cryptography:          {time_crypto:.4f} сек")
     print(f"Бібліотека PyCryptodome:         {time_dome:.4f} сек")
 
-    # Тест завжди проходить успішно, але виводить метрики в консоль
     assert time_hashlib > 0
+

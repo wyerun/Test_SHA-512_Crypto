@@ -1,29 +1,38 @@
-name: Python Package CI
+name: SHA-512 Crypto CI & SAST
 
-# 1. Налаштування подій для запуску (push та pull_request)
 on:
   push:
-    branches: [ "main", "develop" ] # Головна та гілка передвиробничого коду
+    branches: [ "main", "develop" ]
   pull_request:
     branches: [ "main", "develop" ]
 
 jobs:
-  build:
+  # Робота 1: Тестування (вже існуюча)
+  test:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+      - name: Run Tests
+        run: pytest
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: "3.10"
-
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-
-    - name: Test with pytest
-      run: |
-        pytest
+  # Робота 2: Статичне тестування безпеки (SAST)
+  sast:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - name: Install Bandit
+        run: pip install bandit
+      - name: Security Scan with Bandit
+        # Скануємо папку src на вразливості
+        run: bandit -r src/
